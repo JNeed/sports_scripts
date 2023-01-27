@@ -1,0 +1,2 @@
+1.Explore playwright async library. Takes forever for actions to finish because ads take forever to render.
+2. Explore codegen more.

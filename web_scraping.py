@@ -47,8 +47,9 @@ def player_gamelog(player_name, year, p):
     page.goto(full_url)
     # page.mouse.wheel(0,30)
     page.evaluate("window.scrollBy(0, 350)")
-    # print(page.get_by_role("row", name="46 2023-01-18 26-133 CLE @ MEM L (-1) Inactive").get_by_role("cell", name="Inactive").all_text_contents())
-    print(page.get_by_test_id('pgl_basic.940'))
+    # print(page.get_by_test_id('pgl_basic.940').all())
+    # print(page.get_by_role('#pgl_basic\.940 > td:nth-child(28)'))
+    print(page.scroll_into_view_if_needed('#pgl_basic\.940 > td:nth-child(28)'))
     page.close()
     browser.close()
 

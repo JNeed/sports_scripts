@@ -37,7 +37,6 @@ def player_gamelog(player_name, year, p):
 
     if len(lname) > 4:
         lname_short = lname_short[:5]
-        print('lname_short ', lname_short)
     fname_short = fname
     if len(fname)> 1:
         fname_short = fname_short[:2]
@@ -46,9 +45,15 @@ def player_gamelog(player_name, year, p):
 
     full_url = base + fletter_lname + '/' + lname_short + fname_short + '01/gamelog/'+ str(year)
     page.goto(full_url)
+    # page.mouse.wheel(0,30)
+    page.evaluate("window.scrollBy(0, 350)")
+    # print(page.get_by_role("row", name="46 2023-01-18 26-133 CLE @ MEM L (-1) Inactive").get_by_role("cell", name="Inactive").all_text_contents())
+    print(page.get_by_test_id('pgl_basic.940'))
     page.close()
     browser.close()
 
+    # I may have to use playwright's async library. it's taking forever for the web page to fully render due to ads. I don't think
+    # this would cause problems because I think the parts of the page that I'm scraping will be loaded in time.
 
 
 ## trying to find url pattern for players

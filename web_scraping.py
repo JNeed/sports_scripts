@@ -1,7 +1,6 @@
 from playwright.sync_api import sync_playwright
 
 
-
 def player_lookup(player_name, p):
     chromium = p.chromium # or "firefox" or "webkit".
     browser = chromium.launch(headless=False)
@@ -44,17 +43,19 @@ def player_gamelog(player_name, year, p):
     base = "https://www.basketball-reference.com/players/"
 
     full_url = base + fletter_lname + '/' + lname_short + fname_short + '01/gamelog/'+ str(year)
-    page.goto(full_url)
-    # page.mouse.wheel(0,30)
-    page.evaluate("window.scrollBy(0, 350)")
+    try:
+        page.goto(full_url,timeout=4000)
+    except:
+        print('entered except, now scrolling')
+        # page.evaluate("window.scrollBy(0, 600)")
+        # page.wait_for_timeout(4000)
+        ele = page.get_by_role('pgl_basic.949')
     # print(page.get_by_test_id('pgl_basic.940').all())
     # print(page.get_by_role('#pgl_basic\.940 > td:nth-child(28)'))
-    print(page.scroll_into_view_if_needed('#pgl_basic\.940 > td:nth-child(28)'))
+    # print(page.scroll_into_view_if_needed('#pgl_basic\.940 > td:nth-child(28)'))
     page.close()
     browser.close()
-
-    # I may have to use playwright's async library. it's taking forever for the web page to fully render due to ads. I don't think
-    # this would cause problems because I think the parts of the page that I'm scraping will be loaded in time.
+    print('ele ', str(ele))
 
 
 ## trying to find url pattern for players

@@ -1,33 +1,10 @@
 from playwright.sync_api import sync_playwright
 import pandas as pd
-
-def player_lookup(player_name, p):
-    chromium = p.chromium # or "firefox" or "webkit".
-    browser = chromium.launch(headless=False)
-    page = browser.new_page()
-
-    fname,lname = player_name.lower().split()
-    lname_short = lname
-    fletter_lname = lname[0]
-
-    if len(lname) > 4:
-        lname_short = lname_short[:5]
-        print('lname_short ', lname_short)
-    fname_short = fname
-    if len(fname)> 1:
-        fname_short = fname_short[:2]
-
-    base = "https://www.basketball-reference.com/players/"
-    full_url = base + fletter_lname + '/' + lname_short + fname_short + '01.html'
-    print(full_url)
-    page.goto(full_url)
-    page.close()
-    browser.close()
-
+from io import StringIO
 
 def player_gamelog(player_name, year, p):
-    chromium = p.chromium # or "firefox" or "webkit".
-    browser = chromium.launch(headless=False)
+    chromium = p.chromium
+    browser = chromium.launch(headless=True)
     page = browser.new_page()
 
     fname,lname = player_name.lower().split()
@@ -44,29 +21,18 @@ def player_gamelog(player_name, year, p):
 
     full_url = base + fletter_lname + '/' + lname_short + fname_short + '01/gamelog/'+ str(year)
     try:
-        page.goto(full_url,timeout=1000)
+        page.goto(full_url,timeout=1500)
     except:
-        # pts = page.query_selector("#pgl_basic\\.949 > td:nth-child(28)")
-        # print('points: ', pts.inner_text())
-        table = page.query_selector("#pgl_basic")
-        table_str = table.inner_text().split()
-        columns = table_str[:28]
-        start_idx = 28
-        end_idx = 58
-        # print(columns)
-        print(table_str[start_idx:end_idx])
-        # print(table.inner_text().split())
-        # print(table.inner_text().split())
-
-        # print(type(table.inner_text()))
-
-        # print(pd.DataFrame(table.inner_text()))
-        # print(table.inner_text())
-
+        html_table = pd.read_html('https://www.basketball-reference.com/players/d/duranke01/gamelog/2023')
+        # for i, table in enumerate(html_table):
+            # print('table ', str(i), table)
+        html_table[7].to_excel('kd.xlsx')
 
         
     page.close()
     browser.close()
+
+# idea: replace inactive with -1
 
 
 ## trying to find url pattern for players

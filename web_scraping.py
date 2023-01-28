@@ -44,18 +44,13 @@ def player_gamelog(player_name, year, p):
 
     full_url = base + fletter_lname + '/' + lname_short + fname_short + '01/gamelog/'+ str(year)
     try:
-        page.goto(full_url,timeout=4000)
+        page.goto(full_url,timeout=1500)
     except:
-        print('entered except, now scrolling')
-        # page.evaluate("window.scrollBy(0, 600)")
-        # page.wait_for_timeout(4000)
-        ele = page.get_by_role('pgl_basic.949')
-    # print(page.get_by_test_id('pgl_basic.940').all())
-    # print(page.get_by_role('#pgl_basic\.940 > td:nth-child(28)'))
-    # print(page.scroll_into_view_if_needed('#pgl_basic\.940 > td:nth-child(28)'))
+        pts = page.query_selector("#pgl_basic\\.949 > td:nth-child(28)")
+        print('points: ', pts.inner_text())
+        
     page.close()
     browser.close()
-    print('ele ', str(ele))
 
 
 ## trying to find url pattern for players

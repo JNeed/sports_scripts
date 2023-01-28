@@ -1,5 +1,5 @@
 from playwright.sync_api import sync_playwright
-
+import pandas as pd
 
 def player_lookup(player_name, p):
     chromium = p.chromium # or "firefox" or "webkit".
@@ -44,10 +44,26 @@ def player_gamelog(player_name, year, p):
 
     full_url = base + fletter_lname + '/' + lname_short + fname_short + '01/gamelog/'+ str(year)
     try:
-        page.goto(full_url,timeout=1500)
+        page.goto(full_url,timeout=1000)
     except:
-        pts = page.query_selector("#pgl_basic\\.949 > td:nth-child(28)")
-        print('points: ', pts.inner_text())
+        # pts = page.query_selector("#pgl_basic\\.949 > td:nth-child(28)")
+        # print('points: ', pts.inner_text())
+        table = page.query_selector("#pgl_basic")
+        table_str = table.inner_text().split()
+        columns = table_str[:28]
+        start_idx = 28
+        end_idx = 58
+        # print(columns)
+        print(table_str[start_idx:end_idx])
+        # print(table.inner_text().split())
+        # print(table.inner_text().split())
+
+        # print(type(table.inner_text()))
+
+        # print(pd.DataFrame(table.inner_text()))
+        # print(table.inner_text())
+
+
         
     page.close()
     browser.close()

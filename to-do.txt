@@ -1,3 +1,7 @@
-1.Explore playwright async library. Takes forever for actions to finish because ads take forever to render.
-1.5 Idea: Maybe could do a try catch... If page reaches navigation timeout, scroll down and find element.
-2. Explore codegen more.
+1. Ability to get a player's gamelogs for an entire season
+2. Ability to gamelogs for multiple seasons
+3. Ability to get stats on teams
+4. Ability to determine star players
+5. Ability to identify injured players
+6. Ability to identify players that might not play e.g. gametime decision
+7. Ability to make list of injured players for a given matchup

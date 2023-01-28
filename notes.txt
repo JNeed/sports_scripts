@@ -1,0 +1,10 @@
+What I Tried:
+    - At first I thought I needed to explore async because of the slow loading ads...
+    - Then I thought maybe a try except into a scroll.
+
+What I Learned:
+    - I think setting the timeout to something short and using a try except is a good idea because otherwise, the page.goto 
+        command won't terminate until the ads fully render.
+
+    - I don't think a scroll is necessary... I'm pretty sure the entire DOM is rendered when you visit the page, even the parts that 
+        aren't visible

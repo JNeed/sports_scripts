@@ -44,9 +44,10 @@ def player_gamelog(player_name, year, p):
         browser.close()
         return (table,page,browser)
 
-
-with sync_playwright() as p:
-    player = 'Donovan Mitchell'
-    y = 2023 # must be in format yyyy
-    table = player_gamelog(player, y, p)
-    print(table)
+def main_web():
+    table = ''
+    with sync_playwright() as p:
+        player = 'Donovan Mitchell'
+        y = 2023 # must be in format yyyy
+        table = player_gamelog(player, y, p)
+    return table

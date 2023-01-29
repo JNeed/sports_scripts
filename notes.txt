@@ -10,3 +10,9 @@ pattern is /players/first char of last name/first 5 chars of last name, first 2 
 - Shortened timeout and used try-except (handle timeout exception b/c ads never load)
 
     - Actually can just navigate to player's gamelog page and get the table with pd.read_html(url)
+
+- could maybe examine a matchup and projected starters and display the points and injuries for all the projected starters
+    with each player having their own data point color
+
+- Maybe could find a page that displays all active players and could store that info in a database and make a call 
+    to that database from the app to display a dropdown of players for example.

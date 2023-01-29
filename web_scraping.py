@@ -2,7 +2,6 @@ from playwright.sync_api import sync_playwright
 import pandas as pd
 from io import StringIO
 
-
 def name_handling(player_name):
     fname,lname = player_name.lower().split()
     lname_short = lname

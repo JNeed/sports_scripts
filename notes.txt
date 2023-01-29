@@ -1,10 +1,12 @@
-What I Tried:
-    - At first I thought I needed to explore async because of the slow loading ads...
-    - Then I thought maybe a try except into a scroll.
+- navigate directly to a player's game log page (url for each player and each game log follows the same pattern)
 
-What I Learned:
-    - I think setting the timeout to something short and using a try except is a good idea because otherwise, the page.goto 
-        command won't terminate until the ads fully render.
+ex: kevin durant: https://www.basketball-reference.com/players/d/duranke01.html
 
-    - I don't think a scroll is necessary... I'm pretty sure the entire DOM is rendered when you visit the page, even the parts that 
-        aren't visible
+pattern is /players/first char of last name/first 5 chars of last name, first 2 chars of first name, 01.html
+# what if their last name has less than 5 letters though?
+# if their last name has less than 5 letters, just use all of the letters in the last name, still stick to 2 in first name
+# ben uzoh: https://www.basketball-reference.com/players/u/uzohbe01.html
+
+- Shortened timeout and used try-except (handle timeout exception b/c ads never load)
+
+    - Actually can just navigate to player's gamelog page and get the table with pd.read_html(url)

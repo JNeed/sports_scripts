@@ -6,6 +6,7 @@ def player_gamelog(player_name, year, p):
     chromium = p.chromium
     browser = chromium.launch(headless=True)
     page = browser.new_page()
+    html_table = ''
 
     fname,lname = player_name.lower().split()
     lname_short = lname
@@ -23,43 +24,22 @@ def player_gamelog(player_name, year, p):
     try:
         page.goto(full_url,timeout=1500)
     except:
-        html_table = pd.read_html('https://www.basketball-reference.com/players/d/duranke01/gamelog/2023')
-        # for i, table in enumerate(html_table):
-            # print('table ', str(i), table)
-        html_table[7].to_excel('kd.xlsx')
+        html_table = pd.read_html(full_url)[7]
 
-        
+    header_bool = html_table['Rk'].apply(lambda x: x!= 'Rk')
+    html_table = html_table[header_bool]
+    xl = fname +'_'+ lname + '.xlsx'
+    html_table.to_excel(xl)
     page.close()
     browser.close()
 
-# idea: replace inactive with -1
+# idea: replace inactive, did not dress, and did not play with -1
 
 
-## trying to find url pattern for players
-# donovan mitchell: https://www.basketball-reference.com/players/m/mitchdo01.html
-# kevin durant: https://www.basketball-reference.com/players/d/duranke01.html
-# james harden: https://www.basketball-reference.com/players/h/hardeja01.html
 
-# seems like the pattern is /players/first char of last name/first 5 chars of last name, first 2 chars of first name, 01.html
-# what if their last name has less than 5 letters though?
-# if their last name has less than 5 letters, just use all of the letters in the last name, still stick to 2 in first name
-# ben uzoh: https://www.basketball-reference.com/players/u/uzohbe01.html
-
-
-## Codegen
-# def run(player, playwright: Playwright) -> None:
-# ...
-#     page.goto("https://www.basketball-reference.com/players/m/mitchdo01/gamelog/2023")
-#     page.get_by_role("row", name="5 5 2022-10-28 26-051 CLE @ BOS W (+9) 1 45:42 15 25 .600 5 9 .556 6 6 1.000 0 4 4 3 1 0 7 4 41 25.2 +18").get_by_role("cell", name="41").click()
-#     page.get_by_role("row", name="29 25 2022-12-14 26-098 CLE @ DAL W (+15) 1 37:38 13 20 .650 6 9 .667 2 2 1.000 1 2 3 4 1 0 3 5 34 25.3 +20").get_by_role("cell", name="1.000").click()
-#     page.get_by_role("row", name="46 2023-01-18 26-133 CLE @ MEM L (-1) Inactive").get_by_role("cell", name="Inactive").click()
-
-#     # ---------------------
-#     context.close()
-#     browser.close()
 
 
 with sync_playwright() as p:
-    player = 'Kevin Durant'
+    player = 'Donovan Mitchell'
     y = 2023 # must be in format yyyy
     player_gamelog(player,y, p)

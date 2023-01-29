@@ -28,6 +28,7 @@ def player_gamelog(player_name, year, p):
 
     header_bool = html_table['Rk'].apply(lambda x: x!= 'Rk')
     html_table = html_table[header_bool]
+    html_table = html_table.replace(['Inactive', 'Did Not Dress', 'Did Not Play'],-1)
     xl = fname +'_'+ lname + '.xlsx'
     html_table.to_excel(xl)
     page.close()

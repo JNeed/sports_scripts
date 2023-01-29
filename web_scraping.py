@@ -13,12 +13,14 @@ def name_handling(player_name):
         fname_short = fname_short[:2]
     return (fname_short,lname_short)
 
-def table_process_write(fname_short,lname_short,html_table):
+def table_process_write(fname_short,lname_short,write_excel, html_table):
     header_bool = html_table['Rk'].apply(lambda x: x!= 'Rk')
     html_table = html_table[header_bool]
     html_table = html_table.replace(['Inactive', 'Did Not Dress', 'Did Not Play'],-1)
-    xl = fname_short +'_'+ lname_short + '.xlsx'
-    html_table.to_excel(xl)
+    if write_excel:
+        xl = fname_short +'_'+ lname_short + '.xlsx'
+        html_table.to_excel(xl)
+    return html_table
 
 def playwright_start(p):
     chromium = p.chromium
@@ -37,12 +39,14 @@ def player_gamelog(player_name, year, p):
         page.goto(full_url,timeout=1500)
     except:
         html_table = pd.read_html(full_url)[7]
-        table_process_write(fname_short, lname_short, html_table)
+        table = table_process_write(fname_short, lname_short, False, html_table)
+        page.close()
+        browser.close()
+        return (table,page,browser)
 
-    page.close()
-    browser.close()
 
 with sync_playwright() as p:
     player = 'Donovan Mitchell'
     y = 2023 # must be in format yyyy
-    player_gamelog(player,y, p)
+    table = player_gamelog(player, y, p)
+    print(table)

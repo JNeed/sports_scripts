@@ -5,17 +5,16 @@ import pandas as pd
 
 table = main_web()
 
-# print(table)
-# # # prepare some data
-x = table['Date']
-# x = pd.to_datetime(table['Date'], unit='d')
+x = pd.to_datetime(table['Date']).dt.to_period('d')
 
-y = table['PTS']
-# # # create a new plot with a title and axis labels
-p = figure(title="Donovan Mitchell Points", x_axis_label="Date", y_axis_label="Points Scored")
+y = table['PTS'].astype('int32')
 
-# # # add a line renderer with legend and line thickness
-p.line(x, y, legend_label="Points", line_width=2)
+played_bool = y.apply(lambda x: x != -1)
 
-# # # show the results
+p = figure(title="Donovan Mitchell Points", x_axis_label="Date", y_axis_label="Points Scored", x_axis_type='datetime')
+
+
+p.scatter(x[played_bool], y[played_bool], legend_label="Points", color = 'blue',size=5)
+p.scatter(x[~played_bool], y[~played_bool], legend_label="Didn't Play", color = 'red',marker='x',size = 10)
+
 show(p)

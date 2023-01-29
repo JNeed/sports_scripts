@@ -42,7 +42,7 @@ def player_gamelog(player_name, year, p):
         table = table_process_write(fname_short, lname_short, False, html_table)
         page.close()
         browser.close()
-        return (table,page,browser)
+        return table
 
 def main_web():
     table = ''

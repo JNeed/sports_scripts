@@ -16,3 +16,8 @@ pattern is /players/first char of last name/first 5 chars of last name, first 2 
 
 - Maybe could find a page that displays all active players and could store that info in a database and make a call 
     to that database from the app to display a dropdown of players for example.
+
+- Maybe could use a multi-choice widget to display multiple players at once and a tabs widget to switch between stats; maybe 
+could use checkbox to pick what kind of aggregation e.g. sum, avg; could use tabs widget to switch between stats
+
+- Could maybe have checkbox widget to select if you want player level agg or team level agg and/or a matchup

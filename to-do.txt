@@ -1,3 +1,4 @@
+0. Read into hover tool datetime formatting https://docs.bokeh.org/en/latest/docs/user_guide/interaction/tools.html#ug-interaction-tools-basic-tooltips
 1. Ability to get a player's gamelogs for an entire season
 2. Ability to gamelogs for multiple seasons
 3. Ability to get stats on teams

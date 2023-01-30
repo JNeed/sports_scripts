@@ -1,7 +1,7 @@
 from bokeh.plotting import figure, show
 from web_scraping import main_web
 import pandas as pd
-from bokeh.models import BoxAnnotation,DatetimeTickFormatter
+from bokeh.models import BoxAnnotation, HoverTool, PanTool, ResetTool
 
 player = 'Donovan Mitchell'
 year = 2023 # must be in format yyyy
@@ -13,7 +13,9 @@ y = table['PTS'].astype('int32')
 
 played_bool = y.apply(lambda x: x != -1)
 
-p = figure(title=player+ " " + str(year) + " Season Points", x_axis_label="Date", y_axis_label="Points Scored", x_axis_type='datetime')
+# p = figure(title=player+ " " + str(year) + " Season Points", x_axis_label="Date", y_axis_label="Points Scored", x_axis_type='datetime',tools = [HoverTool(), PanTool(), ResetTool()])
+
+p = figure(title=player+ " " + str(year) + " Season Points", x_axis_label="Date", y_axis_label="Points Scored", x_axis_type='datetime',tools = [HoverTool(tooltips=[('date', '@x{%F}'), ('points','@y')],formatters={'@x':'datetime','@y':'numeral'}), PanTool(), ResetTool()])
 
 
 low_box = BoxAnnotation(top=y[played_bool].quantile(.2), fill_alpha=0.2, fill_color='red')
@@ -24,6 +26,4 @@ p.add_layout(high_box)
 
 p.scatter(x[played_bool], y[played_bool], legend_label="Points", color = 'blue',size=5)
 p.scatter(x[~played_bool], y[~played_bool], legend_label="Didn't Play", color = 'red',marker='x',size = 10)
-p.xaxis[0].formatter = DatetimeTickFormatter(months="%B-%y")
-
 show(p)

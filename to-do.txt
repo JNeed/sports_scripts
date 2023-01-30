@@ -1,8 +1,0 @@
-0. Read into hover tool datetime formatting https://docs.bokeh.org/en/latest/docs/user_guide/interaction/tools.html#ug-interaction-tools-basic-tooltips
-1. Ability to get a player's gamelogs for an entire season
-2. Ability to gamelogs for multiple seasons
-3. Ability to get stats on teams
-4. Ability to determine star players
-5. Ability to identify injured players
-6. Ability to identify players that might not play e.g. gametime decision
-7. Ability to make list of injured players for a given matchup

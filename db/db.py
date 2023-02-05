@@ -6,5 +6,5 @@ def get_table(table_name, conn):
     engine = create_engine(conn)
     df = ''
     with engine.connect() as connection:
-        df = pd.DataFrame(connection.execute(text('SELECT * FROM PLAYER')))
+        df = pd.DataFrame(connection.execute(text('SELECT * FROM ' + table_name)))
     return df

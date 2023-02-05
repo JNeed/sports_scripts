@@ -1,5 +1,6 @@
 from web_scraping import main_web
-from scatter import make_player_scatter
+from test2 import make_player_scatter
+# from scatter import make_player_scatter
 from db.db import get_table
 from auto_completion import create_autocomplete
 player = 'Donovan Mitchell'

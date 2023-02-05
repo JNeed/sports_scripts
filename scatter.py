@@ -22,6 +22,7 @@ def make_player_scatter(player,year,table,all_players):
     p.scatter(x[played_bool], y[played_bool], legend_label="Points", color = 'blue',size=5)
     p.scatter(x[~played_bool], y[~played_bool], legend_label="Didn't Play", color = 'red',marker='x',size = 10)
     
+
     ac = create_autocomplete('Enter NBA Player Name Here', 'NAME', all_players)
 
     # ac.on_change('value',cb)
@@ -39,12 +40,21 @@ def make_player_scatter(player,year,table,all_players):
     #     print("Selected val: ",ac.value)
     # ac.on_change("value",update_value)
 
-    show(column(ac,p))
 
+    show(column(ac,p))
+    x = ''
+
+    js_code = """
+    x = ac.value;
+    x.change.emit();
+    """
+    get_name = CustomJS(args=dict(ac=ac,x=x),code=js_code)
+    ac.js_on_change('value',get_name)
     # cb = CustomJS(args=dict(ac=ac),code="ac.value")
 
     # callback = ac.js_on_change("value", "event.target.value")
     # val = ac.js_on_change('value', cb)
+    print(x)
 
     # print(val)
 # def cb(attr,old,new):

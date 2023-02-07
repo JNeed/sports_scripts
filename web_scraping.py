@@ -38,6 +38,7 @@ def player_gamelog(player_name, year, p):
     try:
         page.goto(full_url,timeout=1500)
     except:
+        # fails for duplicate cases like Jaylen Brown and Jabari Brown both brownja
         html_table = pd.read_html(full_url)[7]
         table = table_process_write(fname_short, lname_short, False, html_table)
         page.close()

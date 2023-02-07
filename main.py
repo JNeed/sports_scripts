@@ -9,4 +9,4 @@ table = main_web(player,year)
 all_players = get_table('player','sqlite:///db/nba.db')
 # create_autocomplete('Type the name of an NBA Player', 'NAME', all_players)
 
-make_player_scatter(player, year, table,all_players)
+# make_player_scatter(player, year, table,all_players)

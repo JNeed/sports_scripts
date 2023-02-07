@@ -50,3 +50,31 @@ def main_web(player, year):
     with sync_playwright() as p:
         table = player_gamelog(player, year, p)
     return table
+
+
+
+# exceptions list
+# 'Javonte Green':'https://www.basketball-reference.com/players/g/greenja02.html'
+# 'Jalen Green':'https://www.basketball-reference.com/players/g/greenja05.html'
+# 'JaMychal Green':'https://www.basketball-reference.com/players/g/greenja01.html'
+# 'Bogdan Bogdanovic':'https://www.basketball-reference.com/players/b/bogdabo01.html'
+# 'Bojan Bogdanovic':'https://www.basketball-reference.com/players/b/bogdabo02.html'
+# 'Jalen McDaniels':'https://www.basketball-reference.com/players/m/mcdanja01.html'
+# 'Jaden McDaniels':'https://www.basketball-reference.com/players/m/mcdanja02.html'
+# 'Julian Champagnie':'https://www.basketball-reference.com/players/c/champju02.html'
+# 'Justin Champagnie':'https://www.basketball-reference.com/players/c/champju01.html'
+# 'Ziaire Williams':'https://www.basketball-reference.com/players/w/willizi02.html'
+# 'Zion Williamson':'https://www.basketball-reference.com/players/w/willizi01.html'
+# 'Markieff Morris':'https://www.basketball-reference.com/players/m/morrima02.html'
+# 'Marcus Morris Sr'.:'https://www.basketball-reference.com/players/m/morrima03.html'
+# 'James Johnson':'https://www.basketball-reference.com/players/j/johnsja01.html'
+# 'Jalen Johnson':'https://www.basketball-reference.com/players/j/johnsja05.html'
+# 'Jalen Smith':'https://www.basketball-reference.com/players/s/smithja04.html'
+# 'Jabari Smith Jr.':'https://www.basketball-reference.com/players/s/smithja05.html'
+# 'Jaylin Williams':'https://www.basketball-reference.com/players/w/willija07.html'
+# 'Jalen Williams':'https://www.basketball-reference.com/players/w/willija06.html'
+# 'Keon Johnson':'https://www.basketball-reference.com/players/j/johnske07.html'
+# 'Keldon Johnson':'https://www.basketball-reference.com/players/j/johnske04.html'
+
+
+

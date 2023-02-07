@@ -11,9 +11,9 @@ teams = np.sort(df.TEAM.unique())
 app = Dash(__name__)
 
 app.layout = html.Div([
-    dcc.Dropdown(teams, id='teams'),
+    dcc.Dropdown(teams, value = 'Bos', id='teams'),
     html.Div(id='dd-output-container'),
-    dcc.Dropdown(options=[], id='players'),
+    dcc.Dropdown(options=[], value = 'Jayson Tatum', id='players'),
     # dcc.Dropdown(options=[], multi = True, id='players'),
     dcc.Graph(id = 'graph')
 ],style = {'width':'25%'})
@@ -34,10 +34,8 @@ def update_output(value):
 
 def update_graph(p):
     player = main_web(p, 2023)
-    player.Date = pd.to_datetime(player['Date']).dt.to_period('d')
+    # player.Date = pd.to_datetime(player['Date']).dt.to_period('d')
     player.PTS = player['PTS'].astype('int32')
     fig = px.scatter(player, 'Date','PTS')
     return fig
-    # x = pd.to_datetime(table['Date']).dt.to_period('d')
-    # y = table['PTS'].astype('int32')
 app.run_server(debug=True)

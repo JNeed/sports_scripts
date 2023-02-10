@@ -15,7 +15,8 @@ app.layout = html.Div([
     dcc.Dropdown(teams, value = 'Bos', id='teams'),
     html.Div(id='dd-output-container'),
     dcc.Dropdown(options=bos.NAME, value = 'Jayson Tatum', id='players'),
-    # dcc.Dropdown(options=[], multi = True, id='players'),
+    dcc.Dropdown(options=['FG', 'FGA', 'FG%', '3P', '3PA', '3P%', 'FT', 'FTA', 'FT%', 'ORB',
+       'DRB', 'TRB', 'AST', 'STL', 'BLK', 'TOV', 'PF', 'PTS', 'GmSc', '+/-'], id='stats'),
     dcc.Graph(id = 'graph')
 ],style = {'width':'25%'})
 
@@ -35,8 +36,11 @@ def update_output(value):
 
 def update_graph(p):
     player = main_web(p, 2023)
+    print(player.columns)
     # player.Date = pd.to_datetime(player['Date']).dt.to_period('d')
     player.PTS = player['PTS'].astype('int32')
     fig = px.scatter(player, 'Date','PTS')
     return fig
+
+
 app.run_server(debug=True)

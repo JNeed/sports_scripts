@@ -15,21 +15,16 @@ EXCEPTIONS = {
 'Ziaire Williams':'https://www.basketball-reference.com/players/w/willizi02/gamelog/2023',
 'Zion Williamson':'https://www.basketball-reference.com/players/w/willizi01/gamelog/2023',
 'Markieff Morris':'https://www.basketball-reference.com/players/m/morrima02/gamelog/2023',
-# 'Marcus Morris':'https://www.basketball-reference.com/players/m/morrima03/gamelog/2023',
 'Marcus Morris Sr.':'https://www.basketball-reference.com/players/m/morrima03/gamelog/2023',
 'James Johnson':'https://www.basketball-reference.com/players/j/johnsja01/gamelog/2023',
 'Jalen Johnson':'https://www.basketball-reference.com/players/j/johnsja05/gamelog/2023',
 'Jalen Smith':'https://www.basketball-reference.com/players/s/smithja04/gamelog/2023',
-# 'Jabari Smith':'https://www.basketball-reference.com/players/s/smithja05/gamelog/2023',
 'Jabari Smith Jr.':'https://www.basketball-reference.com/players/s/smithja05/gamelog/2023',
 'Jaylin Williams':'https://www.basketball-reference.com/players/w/willija07/gamelog/2023',
 'Jalen Williams':'https://www.basketball-reference.com/players/w/willija06/gamelog/2023',
 'Keon Johnson':'https://www.basketball-reference.com/players/j/johnske07/gamelog/2023',
 'Keldon Johnson':'https://www.basketball-reference.com/players/j/johnske04/gamelog/2023'
 }
-
-# I think still having problems if name has 3 words in it because just get first name last name
-# EXCEPTIONS =  {k.lower(): v for k, v in EXCEPTIONS.items()}
 
 
 def name_handling(player_name):
@@ -93,31 +88,3 @@ def main_web(player, year):
     with sync_playwright() as p:
         table = player_gamelog(player, year, p)
     return table
-
-
-
-# exceptions list
-# 'Javonte Green':'https://www.basketball-reference.com/players/g/greenja02/gamelog/2023'
-# 'Jalen Green':'https://www.basketball-reference.com/players/g/greenja05/gamelog/2023'
-# 'JaMychal Green':'https://www.basketball-reference.com/players/g/greenja01/gamelog/2023'
-# 'Bogdan Bogdanovic':'https://www.basketball-reference.com/players/b/bogdabo01/gamelog/2023'
-# 'Bojan Bogdanovic':'https://www.basketball-reference.com/players/b/bogdabo02/gamelog/2023'
-# 'Jalen McDaniels':'https://www.basketball-reference.com/players/m/mcdanja01/gamelog/2023'
-# 'Jaden McDaniels':'https://www.basketball-reference.com/players/m/mcdanja02/gamelog/2023'
-# 'Julian Champagnie':'https://www.basketball-reference.com/players/c/champju02/gamelog/2023'
-# 'Justin Champagnie':'https://www.basketball-reference.com/players/c/champju01/gamelog/2023'
-# 'Ziaire Williams':'https://www.basketball-reference.com/players/w/willizi02/gamelog/2023'
-# 'Zion Williamson':'https://www.basketball-reference.com/players/w/willizi01/gamelog/2023'
-# 'Markieff Morris':'https://www.basketball-reference.com/players/m/morrima02/gamelog/2023'
-# 'Marcus Morris Sr'.:'https://www.basketball-reference.com/players/m/morrima03/gamelog/2023'
-# 'James Johnson':'https://www.basketball-reference.com/players/j/johnsja01/gamelog/2023'
-# 'Jalen Johnson':'https://www.basketball-reference.com/players/j/johnsja05/gamelog/2023'
-# 'Jalen Smith':'https://www.basketball-reference.com/players/s/smithja04/gamelog/2023'
-# 'Jabari Smith Jr.':'https://www.basketball-reference.com/players/s/smithja05/gamelog/2023'
-# 'Jaylin Williams':'https://www.basketball-reference.com/players/w/willija07/gamelog/2023'
-# 'Jalen Williams':'https://www.basketball-reference.com/players/w/willija06/gamelog/2023'
-# 'Keon Johnson':'https://www.basketball-reference.com/players/j/johnske07/gamelog/2023'
-# 'Keldon Johnson':'https://www.basketball-reference.com/players/j/johnske04/gamelog/2023'
-
-
-

@@ -7,13 +7,14 @@ from web_scraping import main_web
 
 df = get_table('player', 'sqlite:///db/nba.db')
 teams = np.sort(df.TEAM.unique())
+bos = df.query("TEAM == 'Bos'")
 
 app = Dash(__name__)
 
 app.layout = html.Div([
     dcc.Dropdown(teams, value = 'Bos', id='teams'),
     html.Div(id='dd-output-container'),
-    dcc.Dropdown(options=[], value = 'Jayson Tatum', id='players'),
+    dcc.Dropdown(options=bos.NAME, value = 'Jayson Tatum', id='players'),
     # dcc.Dropdown(options=[], multi = True, id='players'),
     dcc.Graph(id = 'graph')
 ],style = {'width':'25%'})

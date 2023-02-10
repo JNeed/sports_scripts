@@ -13,7 +13,7 @@ app = Dash(__name__)
 
 app.layout = html.Div([
     dcc.Dropdown(teams, value = 'Bos', id='teams'),
-    html.Div(id='dd-output-container'),
+    # html.Div(id='dd-output-container'),
     dcc.Dropdown(options=bos.NAME, value = 'Jayson Tatum', id='players'),
     dcc.Dropdown(options=['FG', 'FGA', 'FG%', '3P', '3PA', '3P%', 'FT', 'FTA', 'FT%', 'ORB',
        'DRB', 'TRB', 'AST', 'STL', 'BLK', 'TOV', 'PF', 'PTS', 'GmSc', '+/-'],id='stats'),
@@ -37,8 +37,6 @@ def update_output(value):
 
 def update_graph(p,stat):
     player = main_web(p, 2023)
-    # print(player.columns)
-    # player.Date = pd.to_datetime(player['Date']).dt.to_period('d')
     player.PTS = player['PTS'].astype('int32')
     player.FG = player['FG'].astype('int32')
     player.FGA = player['FGA'].astype('int32')
@@ -59,8 +57,9 @@ def update_graph(p,stat):
     player.PF = player['PF'].astype('int32')
     player.GmSc = player['GmSc'].astype('float')
     player['+/-'] = player['+/-'].astype('int32')
+    injured = pd.cut(player.PTS,[-1,0,1000],right=False,labels=["Didn't play", "Played"])
 
-    fig = px.scatter(player, 'Date',stat)
+    fig = px.scatter(player, 'Date',stat,color = injured)
     return fig
 
 

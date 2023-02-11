@@ -18,7 +18,8 @@ app.layout = html.Div([
     dcc.Dropdown(options=df.NAME.tolist(), id='players'),
     dcc.Dropdown(options=['FG', 'FGA', 'FG%', '3P', '3PA', '3P%', 'FT', 'FTA', 'FT%', 'ORB',
        'DRB', 'TRB', 'AST', 'STL', 'BLK', 'TOV', 'PF', 'PTS', 'GmSc', '+/-'],id='stats'),
-    dcc.Graph(id = 'graph')
+    dcc.Graph(id = 'graph'),
+    dcc.Store(id = 'intermediate-value')
 ],style = {'width':'25%'})
 
 
@@ -33,15 +34,13 @@ def update_output(value):
     return players
 
 @app.callback(
-    Output('graph','figure'),
-    Input('players','value'),
-    Input('stats','value')
+    Output('intermediate-value','data'),
+    Input('players','value')
 )
-# TODO: Figure out a way to only scrape if player is updated and not scrape if just stat is updated (could just use the same dataframe); maybe could split up the above callback... make one a callback when player changes and store that as an intermediate data value; then make a callback only if stat changes and if that happens, give it 2 inputs, the intermediate stored value and the stat that changed; this could speed up code 
-def update_graph(p,stat):
-    if p == None or stat == None:
-        return go.Figure()
-    player = main_web(p, 2023)
+def update_player(val):
+    if val == None:
+        return
+    player = main_web(val, 2023)
     player["Minutes Played"] = player.MP.str.replace(":",".").astype(float)
     m = player["Minutes Played"].min()
     player["Minutes Played"] = player["Minutes Played"].fillna(m)
@@ -52,12 +51,23 @@ def update_graph(p,stat):
             player[col] = player[col].astype('int32')
             
     injured = pd.cut(player.PTS,[-1,0,1000],right=False,labels=["Didn't play", "Played"])
+    player["Played Boolean"] = injured
+    return player.to_json(date_format='iso', orient='split')
+
+@app.callback(
+    Output('graph','figure'),
+    Input('stats','value'),
+    Input('intermediate-value','data')
+)
+def update_graph(stat, p):
+    if p == None or stat == None:
+        return go.Figure()
+    player = pd.read_json(p, orient='split')
     symbols = ['circle','x']
-    fig = px.scatter(player, 'Date',stat,symbol = injured,color=player["Minutes Played"],color_continuous_scale='blues',symbol_sequence=symbols)
+    fig = px.scatter(player, 'Date',stat,symbol = player["Played Boolean"],color=player["Minutes Played"],color_continuous_scale='blues',symbol_sequence=symbols)
     fig.update_layout(legend=dict(
         yanchor="bottom",
         xanchor="left"),legend_title_text='Played Status',plot_bgcolor='#dbdbdb')
     return fig
-
-
+    
 app.run_server(debug=True)

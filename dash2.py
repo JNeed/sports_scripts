@@ -13,6 +13,7 @@ bos = df.query("TEAM == 'Bos'")
 app = Dash(__name__)
 
 app.layout = html.Div([
+    # TODO: Add true team names as labels to the teams dropdown e.g. Bos -> Celtics
     dcc.Dropdown(teams, value = 'All', id='teams'),
     dcc.Dropdown(options=df.NAME.tolist(), id='players'),
     dcc.Dropdown(options=['FG', 'FGA', 'FG%', '3P', '3PA', '3P%', 'FT', 'FTA', 'FT%', 'ORB',
@@ -44,32 +45,19 @@ def update_graph(p,stat):
     player["Minutes Played"] = player.MP.str.replace(":",".").astype(float)
     m = player["Minutes Played"].min()
     player["Minutes Played"] = player["Minutes Played"].fillna(m)
-    player.PTS = player['PTS'].astype('int32')
-    player.FG = player['FG'].astype('int32')
-    player.FGA = player['FGA'].astype('int32')
-    player['FG%'] = player['FG%'].astype('float')
-    player['3P'] = player['3P'].astype('int32')
-    player['3PA'] = player['3PA'].astype('int32')
-    player['3P%'] = player['3P%'].astype('float')
-    player.FT = player['FT'].astype('int32')
-    player.FTA = player['FTA'].astype('int32')
-    player['FT%'] = player['FT%'].astype('float')
-    player.ORB = player['ORB'].astype('int32')
-    player.DRB = player['DRB'].astype('int32')
-    player.TRB = player['TRB'].astype('int32')
-    player.AST = player['AST'].astype('int32')
-    player.STL = player['STL'].astype('int32')
-    player.BLK = player['BLK'].astype('int32')
-    player.TOV = player['TOV'].astype('int32')
-    player.PF = player['PF'].astype('int32')
-    player.GmSc = player['GmSc'].astype('float')
-    player['+/-'] = player['+/-'].astype('int32')
+    
+    for col in player.columns[10:]:
+        if ('%' in col) or (col == 'GmSc'):
+            player[col] = player[col].astype('float')
+        elif ('%' not in col) and (col != 'GmSc') and (col != 'Minutes Played'):
+            player[col] = player[col].astype('int32')
+            
     injured = pd.cut(player.PTS,[-1,0,1000],right=False,labels=["Didn't play", "Played"])
     symbols = ['circle','x']
     fig = px.scatter(player, 'Date',stat,symbol = injured,color=player["Minutes Played"],color_continuous_scale='blues',symbol_sequence=symbols)
     fig.update_layout(legend=dict(
-    yanchor="bottom",
-    xanchor="left"),legend_title_text='Played Status',plot_bgcolor='#dbdbdb')
+        yanchor="bottom",
+        xanchor="left"),legend_title_text='Played Status',plot_bgcolor='#dbdbdb')
     return fig
 
 

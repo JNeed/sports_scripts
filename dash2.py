@@ -11,15 +11,10 @@ teams = np.append(np.sort(df.TEAM.unique()),"All")
 bos = df.query("TEAM == 'Bos'")
 
 app = Dash(__name__)
-# print(df.NAME)
 
 app.layout = html.Div([
-    # dcc.Dropdown(teams, value = 'Bos', id='teams'),
     dcc.Dropdown(teams, value = 'All', id='teams'),
-    # html.Div(id='dd-output-container'),
-    # dcc.Dropdown(options=bos.NAME,value='Jayson Tatum', id='players'),
     dcc.Dropdown(options=df.NAME.tolist(), id='players'),
-    # dcc.Dropdown(options=df.NAME.tolist(), value='Jayson Tatum', id='players'),
     dcc.Dropdown(options=['FG', 'FGA', 'FG%', '3P', '3PA', '3P%', 'FT', 'FTA', 'FT%', 'ORB',
        'DRB', 'TRB', 'AST', 'STL', 'BLK', 'TOV', 'PF', 'PTS', 'GmSc', '+/-'],id='stats'),
     dcc.Graph(id = 'graph')
@@ -74,7 +69,6 @@ def update_graph(p,stat):
     fig.update_layout(legend=dict(
     yanchor="bottom",
     xanchor="left"),legend_title_text='Played Status',plot_bgcolor='#dbdbdb')
-    # idea: change background color of plot to darker color so you can see lighter points
     return fig
 
 

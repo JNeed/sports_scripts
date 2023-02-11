@@ -18,7 +18,8 @@ app.layout = html.Div([
     dcc.Dropdown(teams, value = 'All', id='teams'),
     # html.Div(id='dd-output-container'),
     # dcc.Dropdown(options=bos.NAME,value='Jayson Tatum', id='players'),
-    dcc.Dropdown(options=df.NAME.tolist(), value='Jayson Tatum', id='players'),
+    dcc.Dropdown(options=df.NAME.tolist(), id='players'),
+    # dcc.Dropdown(options=df.NAME.tolist(), value='Jayson Tatum', id='players'),
     dcc.Dropdown(options=['FG', 'FGA', 'FG%', '3P', '3PA', '3P%', 'FT', 'FTA', 'FT%', 'ORB',
        'DRB', 'TRB', 'AST', 'STL', 'BLK', 'TOV', 'PF', 'PTS', 'GmSc', '+/-'],id='stats'),
     dcc.Graph(id = 'graph')
@@ -42,6 +43,8 @@ def update_output(value):
 )
 
 def update_graph(p,stat):
+    if p == None or stat == None:
+        return go.Figure()
     player = main_web(p, 2023)
     player["Minutes Played"] = player.MP.str.replace(":",".").astype(float)
     m = player["Minutes Played"].min()

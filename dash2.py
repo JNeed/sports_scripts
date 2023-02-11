@@ -65,7 +65,8 @@ def update_graph(p,stat):
     player.GmSc = player['GmSc'].astype('float')
     player['+/-'] = player['+/-'].astype('int32')
     injured = pd.cut(player.PTS,[-1,0,1000],right=False,labels=["Didn't play", "Played"])
-    fig = px.scatter(player, 'Date',stat,symbol = injured,color=player["Minutes Played"],color_continuous_scale='blues')
+    symbols = ['circle','x']
+    fig = px.scatter(player, 'Date',stat,symbol = injured,color=player["Minutes Played"],color_continuous_scale='blues',symbol_sequence=symbols)
     fig.update_layout(legend=dict(
     yanchor="bottom",
     xanchor="left"),legend_title_text='Played Status',plot_bgcolor='#dbdbdb')

@@ -50,8 +50,9 @@ def update_player(val):
         elif ('%' not in col) and (col != 'GmSc') and (col != 'Minutes Played'):
             player[col] = player[col].astype('int32')
             
-    injured = pd.cut(player.PTS,[-1,0,1000],right=False,labels=["Didn't play", "Played"])
-    player["Played Boolean"] = injured
+    injured = player.PTS.apply(lambda x: "Didn't Play" if x == -1 else "Played")
+    # injured = pd.cut(player.PTS,[-1,0,1000],right=False,labels=["Didn't play", "Played"])
+    player["Played Status"] = injured
     return player.to_json(date_format='iso', orient='split')
 
 @app.callback(
@@ -63,8 +64,8 @@ def update_graph(stat, p):
     if p == None or stat == None:
         return go.Figure()
     player = pd.read_json(p, orient='split')
-    symbols = ['circle','x']
-    fig = px.scatter(player, 'Date',stat,symbol = player["Played Boolean"],color=player["Minutes Played"],color_continuous_scale='blues',symbol_sequence=symbols)
+    symbols = ['x','circle']
+    fig = px.scatter(player, 'Date',stat,symbol = player["Played Status"],color=player["Minutes Played"],color_continuous_scale='blues',symbol_sequence=symbols)
     fig.update_layout(legend=dict(
         yanchor="bottom",
         xanchor="left"),legend_title_text='Played Status',plot_bgcolor='#dbdbdb')

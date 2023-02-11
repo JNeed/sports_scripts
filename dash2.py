@@ -37,7 +37,7 @@ def update_output(value):
     Input('players','value'),
     Input('stats','value')
 )
-
+# TODO: Figure out a way to only scrape if player is updated and not scrape if just stat is updated (could just use the same dataframe); maybe could split up the above callback... make one a callback when player changes and store that as an intermediate data value; then make a callback only if stat changes and if that happens, give it 2 inputs, the intermediate stored value and the stat that changed; this could speed up code 
 def update_graph(p,stat):
     if p == None or stat == None:
         return go.Figure()
@@ -45,7 +45,6 @@ def update_graph(p,stat):
     player["Minutes Played"] = player.MP.str.replace(":",".").astype(float)
     m = player["Minutes Played"].min()
     player["Minutes Played"] = player["Minutes Played"].fillna(m)
-    
     for col in player.columns[10:]:
         if ('%' in col) or (col == 'GmSc'):
             player[col] = player[col].astype('float')

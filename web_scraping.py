@@ -23,7 +23,8 @@ EXCEPTIONS = {
 'Jaylin Williams':'https://www.basketball-reference.com/players/w/willija07/gamelog/2023',
 'Jalen Williams':'https://www.basketball-reference.com/players/w/willija06/gamelog/2023',
 'Keon Johnson':'https://www.basketball-reference.com/players/j/johnske07/gamelog/2023',
-'Keldon Johnson':'https://www.basketball-reference.com/players/j/johnske04/gamelog/2023'
+'Keldon Johnson':'https://www.basketball-reference.com/players/j/johnske04/gamelog/2023',
+'Jaylen Brown':'https://www.basketball-reference.com/players/b/brownja02/gamelog/2023'
 }
 
 

@@ -80,18 +80,20 @@ def update_player(player_names):
 )
 def update_graph(stat, players_json_dfs):
     # return go.Figure()
+    color_scales = ['Blues','BuGn','Greys','Oranges',"Purples"]
     if players_json_dfs == None or stat == None:
         return go.Figure()
-    symbols = ['circle','x']
+    injured_symbols = ['x','triangle-up','hash','asterisk','square']
     fig = go.Figure()
     for i,p in enumerate(players_json_dfs):
+        symbols = ['circle',injured_symbols[i]]
         player = pd.read_json(p, orient='split')
         if i == 0:
-            fig = px.scatter(player, 'Date',stat,symbol = player["Played Status"],color=player["Minutes Played"],color_continuous_scale='blues',symbol_sequence=symbols)
+            fig = px.scatter(player, 'Date',stat,symbol = player["Played Status"],color=player["Minutes Played"],color_continuous_scale=color_scales[i],symbol_sequence=symbols)
         else:
             # fig.add_trace(px.scatter(player, 'Date',stat,color = player['Minutes Played'],color_continuous_scale='redor',symbol_sequence=symbols))
 
-            fig.add_trace(go.Scatter(x=player.Date,y=player[stat],mode='markers',marker_color = player['Minutes Played'],marker=dict(size=8,colorscale = 'redor')))
+            fig.add_trace(go.Scatter(x=player.Date,y=player[stat],mode='markers',marker_color = player['Minutes Played'],marker=dict(size=8,colorscale = color_scales[i])))
 
             # fig.add_trace(go.Scatter(x=player.Date,y=player[stat],mode='markers'),marker_color = player['Minutes Played'],colorscale='redor')
     fig.update_layout(legend=dict(

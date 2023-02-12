@@ -19,7 +19,9 @@ app.layout = html.Div([
     dcc.Dropdown(options=['FG', 'FGA', 'FG%', '3P', '3PA', '3P%', 'FT', 'FTA', 'FT%', 'ORB',
        'DRB', 'TRB', 'AST', 'STL', 'BLK', 'TOV', 'PF', 'PTS', 'GmSc', '+/-'],id='stats'),
     dcc.Graph(id = 'graph'),
-    dcc.Store(id = 'intermediate-value')
+    dcc.Store(id = 'intermediate-value'),
+    dcc.Store(id = 'player-names')
+
 ],style = {'width':'25%'})
 
 
@@ -56,16 +58,25 @@ def update_player(player_names):
         player["Played Status"] = injured
         player_df_json_ls.append(player.to_json(date_format='iso', orient='split'))
     return player_df_json_ls
-    
+
+@app.callback(
+    Output('player-names','data'),
+    Input('players','value')
+)
+def get_player_names(player_names):
+    return player_names
 
 @app.callback(
     Output('graph','figure'),
     Input('stats','value'),
-    Input('intermediate-value','data')
+    Input('intermediate-value','data'),
+    Input('player-names','data')
 )
-def update_graph(stat, players_json_dfs):
-    #need another a Dcc name storer and need a callback to actually store names in there; might store names[-1]
-    # return go.Figure()
+def update_graph(stat, players_json_dfs,names):
+    # TODO: need another a Dcc name storer and need a callback to actually store names in there; might store names[-1]; add name argument to marker dict
+    # TODO: add aggregation; need to handle case in which one player is injured and others aren't
+
+
     color_scales = ['Blues','BuGn','Greys','Oranges',"Purples"]
     if players_json_dfs == None or stat == None:
         return go.Figure()
@@ -78,13 +89,13 @@ def update_graph(stat, players_json_dfs):
             fig = px.scatter(player, 'Date',stat,symbol = player["Played Status"],color=player["Minutes Played"],color_continuous_scale=color_scales[i],symbol_sequence=symbols)
         else:
             injured_symbol = player["Played Status"].apply(lambda x: 'circle' if x=="Played" else injured_symbols[i])
-            fig.add_scatter(x = player.Date, y=player[stat],mode='markers',marker_color = player['Minutes Played'],marker=dict(size=6,colorscale = color_scales[i], symbol=injured_symbol))
+            fig.add_scatter(x = player.Date, y=player[stat],mode='markers',marker_color = player['Minutes Played'],marker=dict(size=6,colorscale = color_scales[i], symbol=injured_symbol),name=names[i])
 
             # fig.add_trace(go.Scatter(x=player.Date,y=player[stat],mode='markers',marker_color = player['Minutes Played'],marker=dict(size=6,colorscale = color_scales[i])))
 
             fig.update_layout(legend=dict(
-            yanchor="bottom",
-            xanchor="left"),legend_title_text='Played Status',plot_bgcolor='#dbdbdb')
+                yanchor="bottom",
+                xanchor="left"),legend_title_text='Played Status',plot_bgcolor='#dbdbdb')
     return fig
 
 app.run_server(debug=True)

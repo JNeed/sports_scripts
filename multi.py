@@ -64,7 +64,7 @@ def update_graph(stat, p):
     if p == None or stat == None:
         return go.Figure()
     player = pd.read_json(p, orient='split')
-    symbols = ['x','circle']
+    symbols = ['circle','x']
     fig = px.scatter(player, 'Date',stat,symbol = player["Played Status"],color=player["Minutes Played"],color_continuous_scale='blues',symbol_sequence=symbols)
     fig.update_layout(legend=dict(
         yanchor="bottom",

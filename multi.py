@@ -73,23 +73,29 @@ def get_player_names(player_names):
     Input('player-names','data')
 )
 def update_graph(stat, players_json_dfs,names):
-    # TODO: need another a Dcc name storer and need a callback to actually store names in there; might store names[-1]; add name argument to marker dict
     # TODO: add aggregation; need to handle case in which one player is injured and others aren't
 
-
-    color_scales = ['Blues','BuGn','Greys','Oranges',"Purples"]
+    color_scales = ['Redor','Greys','BuGn','Blues',"Purples"]
     if players_json_dfs == None or stat == None:
         return go.Figure()
     injured_symbols = ['x','triangle-up','hash','asterisk','square']
     fig = go.Figure()
+    
     for i,p in enumerate(players_json_dfs):
         symbols = ['circle',injured_symbols[i]]
         player = pd.read_json(p, orient='split')
+        mp = player['Minutes Played']
+        stat_series = player[stat]
         if i == 0:
             fig = px.scatter(player, 'Date',stat,symbol = player["Played Status"],color=player["Minutes Played"],color_continuous_scale=color_scales[i],symbol_sequence=symbols)
         else:
+            a = player['Played Status']
             injured_symbol = player["Played Status"].apply(lambda x: 'circle' if x=="Played" else injured_symbols[i])
-            fig.add_scatter(x = player.Date, y=player[stat],mode='markers',marker_color = player['Minutes Played'],marker=dict(size=6,colorscale = color_scales[i], symbol=injured_symbol),name=names[i])
+            fig.add_scatter(x = player.Date, y=player[stat],mode='markers',marker_color = player['Minutes Played'],marker=dict(size=6,colorscale = color_scales[i], symbol=injured_symbol),name=names[i],
+                hovertemplate =
+                    '<b>Name</b>: %{name}'+
+                    "<br><b>Date</b>: %{x}<br>"+
+                    "<br><b>Stat Value</b>: %{y}<br>")
 
             # fig.add_trace(go.Scatter(x=player.Date,y=player[stat],mode='markers',marker_color = player['Minutes Played'],marker=dict(size=6,colorscale = color_scales[i])))
 
@@ -99,3 +105,10 @@ def update_graph(stat, players_json_dfs,names):
     return fig
 
 app.run_server(debug=True)
+
+# idea: go to this page (the per 36 table - will prob need an adjusted timeout + try catch again) https://www.basketball-reference.com/teams/BOS/2023.html#all_per_minute-playoffs_per_minute
+# and get the table of players. sort_values('MP') and get the name field and read that into a list
+# go thru each name one by one until you get 7, checking each one if their points are == -1; can concatenate these
+# dataframes; no need to keep them separate because we will agg them anyway;
+# idea: use team choice from above dropdown to get team; have dropdown for first n players we want to agg; agg on
+# stat chosen in above dropdown

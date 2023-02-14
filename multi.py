@@ -5,6 +5,7 @@ import numpy as np
 import plotly.express as px
 from web_scraping import main_web
 import plotly.graph_objects as go
+from team_scraping import get_team_per_game_stats
 
 df = get_table('player', 'sqlite:///db/nba.db')
 teams = np.append(np.sort(df.TEAM.unique()),"All")
@@ -20,7 +21,8 @@ app.layout = html.Div([
        'DRB', 'TRB', 'AST', 'STL', 'BLK', 'TOV', 'PF', 'PTS', 'GmSc', '+/-'],id='stats'),
     dcc.Graph(id = 'graph'),
     dcc.Store(id = 'intermediate-value'),
-    dcc.Store(id = 'player-names')
+    dcc.Store(id = 'player-names'),
+    # dcc.Dropdown([i+1 for i in range(df.NAME.tolist())], id='num_to_agg')
 
 ],style = {'width':'25%'})
 
@@ -96,13 +98,21 @@ def update_graph(stat, players_json_dfs,names):
                     '<b>Name</b>: %{name}'+
                     "<br><b>Date</b>: %{x}<br>"+
                     "<br><b>Stat Value</b>: %{y}<br>")
-
-            # fig.add_trace(go.Scatter(x=player.Date,y=player[stat],mode='markers',marker_color = player['Minutes Played'],marker=dict(size=6,colorscale = color_scales[i])))
-
             fig.update_layout(legend=dict(
                 yanchor="bottom",
                 xanchor="left"),legend_title_text='Played Status',plot_bgcolor='#dbdbdb')
     return fig
+
+    # @app.callback(
+    # Output('agg_reporter','value'),
+    # Input('num_to_agg','value'),
+    # Input('teams','value')
+    # )
+    # def agg_n_players(n,team_name):
+
+    #     team_stats = get_team_per_game_stats(team_name)
+    #     # don't forget to get injury report
+    #     pass
 
 app.run_server(debug=True)
 

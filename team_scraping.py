@@ -19,7 +19,6 @@ def get_team_pergame_table(team_name, p):
         table = html_table[1]
         page.close()
         browser.close()
-        print(table)
         return table
 
 def get_injury_report(p):
@@ -31,9 +30,6 @@ def get_injury_report(p):
     except:
         html_table = pd.read_html(full_url)
         table= html_table[0]
-        print('injury tables ', table)
-        print('len of injury tables ', len(table))
-
         page.close()
         browser.close()
         # print(table)

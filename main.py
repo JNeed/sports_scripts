@@ -9,7 +9,6 @@ from team_scraping import get_team_per_game_stats
 
 df = get_table('player', 'sqlite:///db/nba.db')
 teams = np.append(np.sort(df.TEAM.unique()),"All")
-bos = df.query("TEAM == 'Bos'")
 
 app = Dash(__name__)
 
@@ -22,7 +21,7 @@ app.layout = html.Div([
     dcc.Graph(id = 'graph'),
     dcc.Store(id = 'intermediate-value'),
     dcc.Store(id = 'player-names'),
-    # dcc.Dropdown([i+1 for i in range(df.NAME.tolist())], id='num_to_agg')
+    # dcc.Dropdown(options = [i+1 for i in range(len(df.NAME.tolist())+1)], id='num_to_agg')
 
 ],style = {'width':'25%'})
 
@@ -89,7 +88,7 @@ def update_graph(stat, players_json_dfs,names):
         mp = player['Minutes Played']
         stat_series = player[stat]
         if i == 0:
-            fig = px.scatter(player, 'Date',stat,symbol = player["Played Status"],color=player["Minutes Played"],color_continuous_scale=color_scales[i],symbol_sequence=symbols)
+            fig = px.scatter(player, 'Date',stat,symbol = player["Played Status"],color=player["Minutes Played"],color_continuous_scale=color_scales[i],symbol_sequence=symbols,labels=names[i])
         else:
             a = player['Played Status']
             injured_symbol = player["Played Status"].apply(lambda x: 'circle' if x=="Played" else injured_symbols[i])
@@ -98,10 +97,22 @@ def update_graph(stat, players_json_dfs,names):
                     '<b>Name</b>: %{name}'+
                     "<br><b>Date</b>: %{x}<br>"+
                     "<br><b>Stat Value</b>: %{y}<br>")
-            fig.update_layout(legend=dict(
-                yanchor="bottom",
-                xanchor="left"),legend_title_text='Played Status',plot_bgcolor='#dbdbdb')
+            # fig.update_layout(legend=dict(
+            #     yanchor="bottom",
+            #     xanchor="left"), plot_bgcolor='#dbdbdb')
     return fig
+
+
+    # idk why this isn't updating the number of players to agg on when I choose a dif team
+    # @app.callback(
+    # Output('num_to_agg','options'),
+    # Input('teams','value')
+    # )
+    # def agg_n_players(team_name):
+    #     num_players_on_team = len(df.query('TEAM == @team_name'))
+    #     print(num_players_on_team)
+    #     return [i+1 for i in range(num_players_on_team+1)]
+
 
     # @app.callback(
     # Output('agg_reporter','value'),

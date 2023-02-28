@@ -10,6 +10,8 @@ def playwright_start(p):
 
 def get_team_pergame_table(team_name, p):
     page,browser = playwright_start(p)
+    if team_name == 'All':
+        pass
     full_url = "https://www.basketball-reference.com/teams/" + team_name.upper() + "/2023.html#all_per_minute-playoffs_per_minute"
 
     try:

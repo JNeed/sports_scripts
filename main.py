@@ -21,10 +21,19 @@ app.layout = html.Div([
     dcc.Graph(id = 'graph'),
     dcc.Store(id = 'intermediate-value'),
     dcc.Store(id = 'player-names'),
-    # dcc.Dropdown(options = [i+1 for i in range(len(df.NAME.tolist())+1)], id='num_to_agg')
+    dcc.Dropdown(options = [i+1 for i in range(len(df.NAME.tolist())+1)], id='num_to_agg'),
+    html.P(id="agg_reporter")
 
 ],style = {'width':'25%'})
 
+
+
+# @app.callback(
+#     Output("agg_reporter", "value"),
+#     Input("num_to_agg", "value")
+#     )
+# def click_counter(v):
+#     return f"Testing: {v}"
 
 @app.callback(
     Output('players','options'),
@@ -35,6 +44,14 @@ def update_output(value):
         return df.NAME
     players = df.query('TEAM == @value').NAME
     return players
+
+@app.callback(
+    Output('num_to_agg','options'),
+    Input('teams', 'value')
+)
+def agg_n_players(team_name):
+    num_players_on_team = len(df.query('TEAM == @team_name').NAME)
+    return [i+1 for i in range(num_players_on_team+1)]
 
 @app.callback(
     Output('intermediate-value','data'),
@@ -102,30 +119,23 @@ def update_graph(stat, players_json_dfs,names):
             #     xanchor="left"), plot_bgcolor='#dbdbdb')
     return fig
 
+@app.callback(
+Output('agg_reporter','children'),
+Input('num_to_agg','value'),
+Input('teams','value')
+)
+def agg_n_players(n,team_name):
+    if team_name == 'All':
+        return
+    team_stats = get_team_per_game_stats(team_name)
+    # don't forget to get injury report
+    mp = team_stats['MP'].sum()
+    return f'The total number of minutes played per player per game on this team is: {mp}'
 
-    # idk why this isn't updating the number of players to agg on when I choose a dif team
-    # @app.callback(
-    # Output('num_to_agg','options'),
-    # Input('teams','value')
-    # )
-    # def agg_n_players(team_name):
-    #     num_players_on_team = len(df.query('TEAM == @team_name'))
-    #     print(num_players_on_team)
-    #     return [i+1 for i in range(num_players_on_team+1)]
 
-
-    # @app.callback(
-    # Output('agg_reporter','value'),
-    # Input('num_to_agg','value'),
-    # Input('teams','value')
-    # )
-    # def agg_n_players(n,team_name):
-
-    #     team_stats = get_team_per_game_stats(team_name)
-    #     # don't forget to get injury report
-    #     pass
 
 app.run_server(debug=True)
+
 
 # idea: go to this page (the per 36 table - will prob need an adjusted timeout + try catch again) https://www.basketball-reference.com/teams/BOS/2023.html#all_per_minute-playoffs_per_minute
 # and get the table of players. sort_values('MP') and get the name field and read that into a list

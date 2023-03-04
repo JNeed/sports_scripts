@@ -46,15 +46,16 @@ def update_output(value):
 
     # injured = inj().Player.str.split().str[1:].str.join(sep=' ')
     result = []
-    print('injured: ', injured)
+    # print('injured: ', injured)
+    # print('players on team',players_on_team.values)
     for injured_player in injured:
-        if injured_player in players_on_team:
+        # print('injured player: ',injured_player)
+        if injured_player in players_on_team.values:
         # if a.lower() in players.str.lower():
-            result.append(a)
+            result.append(injured_player)
     s = ', '.join(result)
-    print('s: ',s)
-    # if not result:
-    #     return f"No {value} players are injured"
+    if not result:
+        return f"No {value} players are injured"
     return f"The following {value} players are injured: {s}"
 
 

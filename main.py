@@ -42,16 +42,9 @@ def update_output(value):
         return
     players_on_team = df.query('Tm == @value').Player
     injured = inj().Player
-    # print(injured)
-
-    # injured = inj().Player.str.split().str[1:].str.join(sep=' ')
     result = []
-    # print('injured: ', injured)
-    # print('players on team',players_on_team.values)
     for injured_player in injured:
-        # print('injured player: ',injured_player)
         if injured_player in players_on_team.values:
-        # if a.lower() in players.str.lower():
             result.append(injured_player)
     s = ', '.join(result)
     if not result:

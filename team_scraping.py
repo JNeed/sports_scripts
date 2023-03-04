@@ -62,5 +62,3 @@ def get_all_players_and_teams():
             return df
         pass
     pass
-
-get_all_players_and_teams()

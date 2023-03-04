@@ -5,24 +5,34 @@ import numpy as np
 import plotly.express as px
 from web_scraping import main_web
 import plotly.graph_objects as go
-from team_scraping import get_team_per_game_stats
+from team_scraping import get_team_per_game_stats,inj,get_all_players_and_teams
 
-df = get_table('player', 'sqlite:///db/nba.db')
-teams = np.append(np.sort(df.TEAM.unique()),"All")
+
+# TODO Database has wrong players on wrong teams... Need to scrape team roster; may be able to scrape injury report and roster in same scrape w/ pd function as list of dfs
+
+# teams = {"Atlanta Hawks":'ATL','Boston Celtics':'BOS','Philadelphia 76ers':'PHI','New York Knicks':'NYK','Brooklyn Nets':'BRK','Toronto Raptors':'TOR','Miluakee Bucks':'MIL','Cleveland Cavaliers':'CLE','Chicago Bulls':'CHI','Indiana Pacers':'IND','Detroit Pistons':'DET','Miami Heat':'MIA','Washing Wizards':'WAS','Orlando Magic':'ORL','Charlotte Hornets':'CHO','Denver Nuggets':'DEN','Minnesota Timberwolves':'MIN','Utah Jazz':'UTA','Oklahoma City Thunder':'OKC','Portland Trail Blazers':'POR','Sacramento Kings':'SAC','Phoenix Suns':'PHO','Golden State Warriors':'GSW','Los Angeles Clippers':'LAC','Los Angeles Lakers':'LAL','Memphis Grizzlies':'MEM','Dallas Mavericks':'DAL','New Orleans Pelicans':'NOP','San Antonio Spurs':'SAS','Houston Rockets':'HOU','All':'All'}
+
+# {'label': 'New York City', 'value': 'NYC', 'disabled': True},
+teams_ls_dict = [{'label':'Atlanta Hawks','value':'ATL'},{'label':'Boston Celtics','value':'BOS'},{'label':'Philadelphia 76ers','value':'PHI'},{'label':'New York Knicks','value':'NYK'},{'label':'Brooklyn Nets','value':'BRK'},{'label':'Toronto Raptors','value':'TOR'},{'label':'Miluakee Bucks','value':'MIL'},{'label':'Cleveland Cavaliers','value':'CLE'},{'label':'Chicago Bulls','value':'CHI'},{'label':'Indiana Pacers','value':'IND'},{'label':'Detroit Pistons','value':'DET'},{'label':'Miami Heat','value':'MIA'},{'label':'Washing Wizards','value':'WAS'},{'label':'Orlando Magic','value':'ORL'},{'label':'Charlotte Hornets','value':'CHO'},{'label':'Denver Nuggets','value':'DEN'},{'label':'Minnesota Timberwolves','value':'MIN'},{'label':'Utah Jazz','value':'UTA'},{'label':'Oklahoma City Thunder','value':'OKC'},{'label':'Portland Trail Blazers','value':'POR'},{'label':'Sacramento Kings','value':'SAC'},{'label':'Phoenix Suns','value':'PHO'},{'label':'Golden State Warriors','value':'GSW'},{'label':'Los Angeles Clippers','value':'LAC'},{'label':'Los Angeles Lakers','value':'LAL'},{'label':'Memphis Grizzlies','value':'MEM'},{'label':'Dallas Mavericks','value':'DAL'},{'label':'New Orleans Pelicans','value':'NOP'},{'label':'San Antonio Spurs','value':'SAS'},{'label':'Houston Rockets','value':'HOU'},{'label':'All','value':'All'}]
+# df = get_table('player', 'sqlite:///db/nba.db')
+df = get_all_players_and_teams()
+
 
 app = Dash(__name__)
 
 app.layout = html.Div([
     # TODO: Add true team names as labels to the teams dropdown e.g. Bos -> Celtics
-    dcc.Dropdown(teams, value = 'All', id='teams'),
-    dcc.Dropdown(options=df.NAME.tolist(), id='players',multi=True),
+    dcc.Dropdown(options = teams_ls_dict, value = 'All', id='teams'),
+    dcc.Dropdown(options=df.Player.tolist(), id='players',multi=True),
     dcc.Dropdown(options=['FG', 'FGA', 'FG%', '3P', '3PA', '3P%', 'FT', 'FTA', 'FT%', 'ORB',
        'DRB', 'TRB', 'AST', 'STL', 'BLK', 'TOV', 'PF', 'PTS', 'GmSc', '+/-'],id='stats'),
     dcc.Graph(id = 'graph'),
     dcc.Store(id = 'intermediate-value'),
     dcc.Store(id = 'player-names'),
-    dcc.Dropdown(options = [i+1 for i in range(len(df.NAME.tolist())+1)], id='num_to_agg'),
-    html.P(id="agg_reporter")
+    dcc.Dropdown(options = [i+1 for i in range(len(df.Player.tolist())+1)], id='num_to_agg'),
+    html.P(id="agg_reporter"),
+    html.P(id="injured_players")
+    # ,html.P(id="injury_report")
 
 ],style = {'width':'25%'})
 
@@ -36,13 +46,39 @@ app.layout = html.Div([
 #     return f"Testing: {v}"
 
 @app.callback(
+    Output('injured_players','children'),
+    Input('teams', 'value')
+)
+def update_output(value):
+    # TODO Figure out why I'm not getting injured players from the team I want
+    if value == "All":
+        return
+    players = df.query('Tm == @value').Player
+    injured = inj().Player
+    # print(injured)
+
+    # injured = inj().Player.str.split().str[1:].str.join(sep=' ')
+    result = []
+    print('players: ',players)
+    # print('injured: ', injured)
+    for a in injured:
+        if a.lower() in players.str.lower():
+            result.append(a)
+    print(result)
+    s = ', '.join(result)
+    # if not result:
+    #     return f"No {value} players are injured"
+    return f"The following {value} players are injured: {s}"
+
+
+@app.callback(
     Output('players','options'),
     Input('teams', 'value')
 )
 def update_output(value):
     if value == "All":
-        return df.NAME
-    players = df.query('TEAM == @value').NAME
+        return df.Player
+    players = df.query('Tm == @value').Player
     return players
 
 @app.callback(
@@ -50,7 +86,7 @@ def update_output(value):
     Input('teams', 'value')
 )
 def agg_n_players(team_name):
-    num_players_on_team = len(df.query('TEAM == @team_name').NAME)
+    num_players_on_team = len(df.query('Tm == @team_name').Tm)
     return [i+1 for i in range(num_players_on_team+1)]
 
 @app.callback(
@@ -129,9 +165,10 @@ def agg_n_players(n,team_name):
         return
     team_stats = get_team_per_game_stats(team_name)
     # don't forget to get injury report
-    mp = team_stats['MP'].sum()
+    mp = round(team_stats['MP'].sum(),2)
     return f'The total number of minutes played per player per game on this team is: {mp}'
 
+# TODO fix team names in url creation e.g. Brooklyn should be BRK, not BRO
 
 
 app.run_server(debug=True)

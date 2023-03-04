@@ -8,7 +8,7 @@ import plotly.graph_objects as go
 from team_scraping import get_team_per_game_stats,inj,get_all_players_and_teams
 
 
-teams_ls_dict = [{'label':'Atlanta Hawks','value':'ATL'},{'label':'Boston Celtics','value':'BOS'},{'label':'Philadelphia 76ers','value':'PHI'},{'label':'New York Knicks','value':'NYK'},{'label':'Brooklyn Nets','value':'BRK'},{'label':'Toronto Raptors','value':'TOR'},{'label':'Miluakee Bucks','value':'MIL'},{'label':'Cleveland Cavaliers','value':'CLE'},{'label':'Chicago Bulls','value':'CHI'},{'label':'Indiana Pacers','value':'IND'},{'label':'Detroit Pistons','value':'DET'},{'label':'Miami Heat','value':'MIA'},{'label':'Washing Wizards','value':'WAS'},{'label':'Orlando Magic','value':'ORL'},{'label':'Charlotte Hornets','value':'CHO'},{'label':'Denver Nuggets','value':'DEN'},{'label':'Minnesota Timberwolves','value':'MIN'},{'label':'Utah Jazz','value':'UTA'},{'label':'Oklahoma City Thunder','value':'OKC'},{'label':'Portland Trail Blazers','value':'POR'},{'label':'Sacramento Kings','value':'SAC'},{'label':'Phoenix Suns','value':'PHO'},{'label':'Golden State Warriors','value':'GSW'},{'label':'Los Angeles Clippers','value':'LAC'},{'label':'Los Angeles Lakers','value':'LAL'},{'label':'Memphis Grizzlies','value':'MEM'},{'label':'Dallas Mavericks','value':'DAL'},{'label':'New Orleans Pelicans','value':'NOP'},{'label':'San Antonio Spurs','value':'SAS'},{'label':'Houston Rockets','value':'HOU'},{'label':'All','value':'All'}]
+teams_ls_dict = [{'label':'All','value':'All'},{'label':'Atlanta Hawks','value':'ATL'},{'label':'Boston Celtics','value':'BOS'},{'label':'Philadelphia 76ers','value':'PHI'},{'label':'New York Knicks','value':'NYK'},{'label':'Brooklyn Nets','value':'BRK'},{'label':'Toronto Raptors','value':'TOR'},{'label':'Miluakee Bucks','value':'MIL'},{'label':'Cleveland Cavaliers','value':'CLE'},{'label':'Chicago Bulls','value':'CHI'},{'label':'Indiana Pacers','value':'IND'},{'label':'Detroit Pistons','value':'DET'},{'label':'Miami Heat','value':'MIA'},{'label':'Washing Wizards','value':'WAS'},{'label':'Orlando Magic','value':'ORL'},{'label':'Charlotte Hornets','value':'CHO'},{'label':'Denver Nuggets','value':'DEN'},{'label':'Minnesota Timberwolves','value':'MIN'},{'label':'Utah Jazz','value':'UTA'},{'label':'Oklahoma City Thunder','value':'OKC'},{'label':'Portland Trail Blazers','value':'POR'},{'label':'Sacramento Kings','value':'SAC'},{'label':'Phoenix Suns','value':'PHO'},{'label':'Golden State Warriors','value':'GSW'},{'label':'Los Angeles Clippers','value':'LAC'},{'label':'Los Angeles Lakers','value':'LAL'},{'label':'Memphis Grizzlies','value':'MEM'},{'label':'Dallas Mavericks','value':'DAL'},{'label':'New Orleans Pelicans','value':'NOP'},{'label':'San Antonio Spurs','value':'SAS'},{'label':'Houston Rockets','value':'HOU'}]
 # df = get_table('player', 'sqlite:///db/nba.db')
 df = get_all_players_and_teams()
 
@@ -46,11 +46,13 @@ def update_output(value):
 
     # injured = inj().Player.str.split().str[1:].str.join(sep=' ')
     result = []
-    # print('injured: ', injured)
+    print('injured: ', injured)
     for a in injured:
-        if a.lower() in players.str.lower():
+        if a in players:
+        # if a.lower() in players.str.lower():
             result.append(a)
     s = ', '.join(result)
+    print('s: ',s)
     # if not result:
     #     return f"No {value} players are injured"
     return f"The following {value} players are injured: {s}"

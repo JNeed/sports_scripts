@@ -5,7 +5,7 @@ import numpy as np
 import plotly.express as px
 from web_scraping import main_web
 import plotly.graph_objects as go
-from team_scraping import get_team_per_game_stats,inj,get_all_players_and_teams
+from team_scraping import get_team_per_game_stats,get_injury_report,get_all_players_and_teams
 
 
 teams_ls_dict = [{'label':'All','value':'All'},{'label':'Atlanta Hawks','value':'ATL'},{'label':'Boston Celtics','value':'BOS'},{'label':'Philadelphia 76ers','value':'PHI'},{'label':'New York Knicks','value':'NYK'},{'label':'Brooklyn Nets','value':'BRK'},{'label':'Toronto Raptors','value':'TOR'},{'label':'Miluakee Bucks','value':'MIL'},{'label':'Cleveland Cavaliers','value':'CLE'},{'label':'Chicago Bulls','value':'CHI'},{'label':'Indiana Pacers','value':'IND'},{'label':'Detroit Pistons','value':'DET'},{'label':'Miami Heat','value':'MIA'},{'label':'Washing Wizards','value':'WAS'},{'label':'Orlando Magic','value':'ORL'},{'label':'Charlotte Hornets','value':'CHO'},{'label':'Denver Nuggets','value':'DEN'},{'label':'Minnesota Timberwolves','value':'MIN'},{'label':'Utah Jazz','value':'UTA'},{'label':'Oklahoma City Thunder','value':'OKC'},{'label':'Portland Trail Blazers','value':'POR'},{'label':'Sacramento Kings','value':'SAC'},{'label':'Phoenix Suns','value':'PHO'},{'label':'Golden State Warriors','value':'GSW'},{'label':'Los Angeles Clippers','value':'LAC'},{'label':'Los Angeles Lakers','value':'LAL'},{'label':'Memphis Grizzlies','value':'MEM'},{'label':'Dallas Mavericks','value':'DAL'},{'label':'New Orleans Pelicans','value':'NOP'},{'label':'San Antonio Spurs','value':'SAS'},{'label':'Houston Rockets','value':'HOU'}]
@@ -40,7 +40,7 @@ def update_output(value):
     if value == "All":
         return
     players_on_team = df.query('Tm == @value').Player
-    injured = inj().Player
+    injured = get_injury_report().Player
     result = []
     for injured_player in injured:
         if injured_player in players_on_team.values:

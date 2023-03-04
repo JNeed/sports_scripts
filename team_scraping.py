@@ -23,18 +23,21 @@ def get_team_pergame_table(team_name, p):
         browser.close()
         return table
 
-def get_injury_report(p):
-    page,browser = playwright_start(p)
-    full_url = "https://www.basketball-reference.com/friv/injuries.fcgi"
+def get_injury_report():
+    table = ''
+    with sync_playwright() as p:
+        page,browser = playwright_start(p)
+        full_url = "https://www.basketball-reference.com/friv/injuries.fcgi"
 
-    try:
-        page.goto(full_url,timeout=1500)
-    except:
-        html_table = pd.read_html(full_url)
-        table= html_table[0]
-        page.close()
-        browser.close()
-        return table
+        try:
+            page.goto(full_url,timeout=1500)
+        except:
+            html_table = pd.read_html(full_url)
+            table= html_table[0]
+            page.close()
+            browser.close()
+            return table
+        pass
 
 
 
@@ -67,11 +70,11 @@ def get_all_players_and_teams():
 
 
 
-def inj():
-    table = ''
-    with sync_playwright() as p:
-        table = get_injury_report(p)
-    return table
+# def inj():
+#     table = ''
+#     with sync_playwright() as p:
+#         table = get_injury_report(p)
+#     return table
 
 get_all_players_and_teams()
 

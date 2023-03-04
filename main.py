@@ -40,15 +40,15 @@ def update_output(value):
     # TODO Figure out why I'm not getting injured players from the team I want
     if value == "All":
         return
-    players = df.query('Tm == @value').Player
+    players_on_team = df.query('Tm == @value').Player
     injured = inj().Player
     # print(injured)
 
     # injured = inj().Player.str.split().str[1:].str.join(sep=' ')
     result = []
     print('injured: ', injured)
-    for a in injured:
-        if a in players:
+    for injured_player in injured:
+        if injured_player in players_on_team:
         # if a.lower() in players.str.lower():
             result.append(a)
     s = ', '.join(result)

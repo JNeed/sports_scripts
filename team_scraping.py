@@ -44,22 +44,6 @@ def get_team_per_game_stats(team_name):
         table = get_team_pergame_table(team_name,p)
     return table
 
-def get_roster(team_name,p):
-    table = ''
-    page,browser = playwright_start(p)
-    if team_name == 'All':
-        pass
-    full_url = "https://www.basketball-reference.com/teams/" + team_name.upper() + "/2023.html#all_roster"
-
-    try:
-        page.goto(full_url,timeout=1500)
-    except:
-        html_table = pd.read_html(full_url)
-        page.close()
-        browser.close()
-        return table[0]
-    return table
-
 def get_all_players_and_teams():
     with sync_playwright() as p:
         page,browser = playwright_start(p)

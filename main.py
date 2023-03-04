@@ -148,9 +148,6 @@ def agg_n_players(n,team_name):
     mp = round(team_stats['MP'].sum(),2)
     return f'The total number of minutes played per player per game on this team is: {mp}'
 
-# TODO fix team names in url creation e.g. Brooklyn should be BRK, not BRO
-
-
 app.run_server(debug=True)
 
 

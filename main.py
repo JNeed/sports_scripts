@@ -8,11 +8,6 @@ import plotly.graph_objects as go
 from team_scraping import get_team_per_game_stats,inj,get_all_players_and_teams
 
 
-# TODO Database has wrong players on wrong teams... Need to scrape team roster; may be able to scrape injury report and roster in same scrape w/ pd function as list of dfs
-
-# teams = {"Atlanta Hawks":'ATL','Boston Celtics':'BOS','Philadelphia 76ers':'PHI','New York Knicks':'NYK','Brooklyn Nets':'BRK','Toronto Raptors':'TOR','Miluakee Bucks':'MIL','Cleveland Cavaliers':'CLE','Chicago Bulls':'CHI','Indiana Pacers':'IND','Detroit Pistons':'DET','Miami Heat':'MIA','Washing Wizards':'WAS','Orlando Magic':'ORL','Charlotte Hornets':'CHO','Denver Nuggets':'DEN','Minnesota Timberwolves':'MIN','Utah Jazz':'UTA','Oklahoma City Thunder':'OKC','Portland Trail Blazers':'POR','Sacramento Kings':'SAC','Phoenix Suns':'PHO','Golden State Warriors':'GSW','Los Angeles Clippers':'LAC','Los Angeles Lakers':'LAL','Memphis Grizzlies':'MEM','Dallas Mavericks':'DAL','New Orleans Pelicans':'NOP','San Antonio Spurs':'SAS','Houston Rockets':'HOU','All':'All'}
-
-# {'label': 'New York City', 'value': 'NYC', 'disabled': True},
 teams_ls_dict = [{'label':'Atlanta Hawks','value':'ATL'},{'label':'Boston Celtics','value':'BOS'},{'label':'Philadelphia 76ers','value':'PHI'},{'label':'New York Knicks','value':'NYK'},{'label':'Brooklyn Nets','value':'BRK'},{'label':'Toronto Raptors','value':'TOR'},{'label':'Miluakee Bucks','value':'MIL'},{'label':'Cleveland Cavaliers','value':'CLE'},{'label':'Chicago Bulls','value':'CHI'},{'label':'Indiana Pacers','value':'IND'},{'label':'Detroit Pistons','value':'DET'},{'label':'Miami Heat','value':'MIA'},{'label':'Washing Wizards','value':'WAS'},{'label':'Orlando Magic','value':'ORL'},{'label':'Charlotte Hornets','value':'CHO'},{'label':'Denver Nuggets','value':'DEN'},{'label':'Minnesota Timberwolves','value':'MIN'},{'label':'Utah Jazz','value':'UTA'},{'label':'Oklahoma City Thunder','value':'OKC'},{'label':'Portland Trail Blazers','value':'POR'},{'label':'Sacramento Kings','value':'SAC'},{'label':'Phoenix Suns','value':'PHO'},{'label':'Golden State Warriors','value':'GSW'},{'label':'Los Angeles Clippers','value':'LAC'},{'label':'Los Angeles Lakers','value':'LAL'},{'label':'Memphis Grizzlies','value':'MEM'},{'label':'Dallas Mavericks','value':'DAL'},{'label':'New Orleans Pelicans','value':'NOP'},{'label':'San Antonio Spurs','value':'SAS'},{'label':'Houston Rockets','value':'HOU'},{'label':'All','value':'All'}]
 # df = get_table('player', 'sqlite:///db/nba.db')
 df = get_all_players_and_teams()
@@ -37,14 +32,6 @@ app.layout = html.Div([
 ],style = {'width':'25%'})
 
 
-
-# @app.callback(
-#     Output("agg_reporter", "value"),
-#     Input("num_to_agg", "value")
-#     )
-# def click_counter(v):
-#     return f"Testing: {v}"
-
 @app.callback(
     Output('injured_players','children'),
     Input('teams', 'value')
@@ -59,12 +46,10 @@ def update_output(value):
 
     # injured = inj().Player.str.split().str[1:].str.join(sep=' ')
     result = []
-    print('players: ',players)
     # print('injured: ', injured)
     for a in injured:
         if a.lower() in players.str.lower():
             result.append(a)
-    print(result)
     s = ', '.join(result)
     # if not result:
     #     return f"No {value} players are injured"

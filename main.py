@@ -16,7 +16,6 @@ df = get_all_players_and_teams()
 app = Dash(__name__)
 
 app.layout = html.Div([
-    # TODO: Add true team names as labels to the teams dropdown e.g. Bos -> Celtics
     dcc.Dropdown(options = teams_ls_dict, value = 'All', id='teams'),
     dcc.Dropdown(options=df.Player.tolist(), id='players',multi=True),
     dcc.Dropdown(options=['FG', 'FGA', 'FG%', '3P', '3PA', '3P%', 'FT', 'FTA', 'FT%', 'ORB',

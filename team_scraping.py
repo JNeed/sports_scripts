@@ -68,16 +68,4 @@ def get_all_players_and_teams():
         pass
     pass
 
-
-
-# def inj():
-#     table = ''
-#     with sync_playwright() as p:
-#         table = get_injury_report(p)
-#     return table
-
 get_all_players_and_teams()
-
-
-# get injury report from here https://www.basketball-reference.com/friv/injuries.fcgi
-# could keep running list of injured players and list injured players on page

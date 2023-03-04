@@ -37,7 +37,6 @@ app.layout = html.Div([
     Input('teams', 'value')
 )
 def update_output(value):
-    # TODO Figure out why I'm not getting injured players from the team I want
     if value == "All":
         return
     players_on_team = df.query('Tm == @value').Player
